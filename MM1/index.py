@@ -2,6 +2,7 @@ import math
 import random
 from decimal import *
 from texttable import Texttable
+from patient import *
 
 def getArrivalTimes(meanArrivalNumber):
     cumulativeProbability = 0
@@ -46,7 +47,7 @@ def getServiceTimes(length, meanServiceNumber):
     serviceTimes = []
     for i in range(length):
         serviceTime = -meanServiceNumber * math.log(random.random())
-        serviceTimes.append(round(serviceTime))
+        serviceTimes.append(round(math.ceil(serviceTime)))
     return serviceTimes
 
 def getPriorities(length, A, M, Z, C, a, b):
@@ -81,25 +82,29 @@ def display(arrivalTimes, serviceTimes, priorities):
     
 
 if __name__ == "__main__":
-    # meanArrivalNumber = 2.25
-    # meanServiceNumber = 8.98
-    # A = 55
-    # M = 1994
-    # Z = 10112166
-    # C = 9
-    # a = 1
-    # b = 3
-    meanArrivalNumber = float(input("Enter the value of Mean Arrival Number:- "))
-    meanServiceNumber = float(input("Enter the value of Mean Service Number:- "))
-    A = int(input("Enter the value of A:- "))
-    M = int(input("Enter the value of M:- "))
-    Z = int(input("Enter the value of Z:- "))
-    C = int(input("Enter the value of C:- "))
-    a = int(input("Enter the value of a:- "))
-    b = int(input("Enter the value of b:- "))
+    meanArrivalNumber = 2.25
+    meanServiceNumber = 8.98
+    A = 55
+    M = 1994
+    Z = 10112166
+    C = 9
+    a = 1
+    b = 3
+    # meanArrivalNumber = float(input("Enter the value of Mean Arrival Number:- "))
+    # meanServiceNumber = float(input("Enter the value of Mean Service Number:- "))
+    # A = int(input("Enter the value of A:- "))
+    # M = int(input("Enter the value of M:- "))
+    # Z = int(input("Enter the value of Z:- "))
+    # C = int(input("Enter the value of C:- "))
+    # a = int(input("Enter the value of a:- "))
+    # b = int(input("Enter the value of b:- "))
 
 
     arrivalTimes = getArrivalTimes(meanArrivalNumber)
     serviceTimes = getServiceTimes(len(arrivalTimes['arrivalTimes']), meanServiceNumber)
     priorities = getPriorities(len(arrivalTimes['arrivalTimes']), A, M, Z, C, a, b)
     display(arrivalTimes, serviceTimes, priorities)
+
+    patients = [Patient(i+1, arrivalTimes['arrivalTimes'][i], serviceTimes[i], priorities[i], serviceTimes[i]) for i in range(len(arrivalTimes['arrivalTimes']))]
+
+    serve_highest_priority_first(patients)
