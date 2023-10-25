@@ -185,7 +185,19 @@ def serve_highest_priority_first(patients):
     if len(ran_patient.start_times) > len(ran_patient.end_times):
         ran_patient.append_end_times(time_passed)
 
+    total_service_time = 0
+    for patient in patients:
+        total_service_time += patient.burst_time
+
+    utlization_time = total_service_time / time_passed
+
+    if utlization_time < 0 or utlization_time > 1:
+        print("Invalid mean, utilization time is out of range.")
+        return
+    
     draw_gantt_chart(patients)
+
+    print(f'Utilization Time:- {utlization_time}')
 
     print("Final Patient Table")
     print_patient_table(patients)
